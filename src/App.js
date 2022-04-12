@@ -1,30 +1,29 @@
 
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 
 function App() {
 
   const [funcionarios, setFuncionarios] = useState([
-    { cpf: '431', nome: 'João', promover: false }
+    { cpf: '583', name: 'roger', promover: false }
 
   ])
 
+  var [mostrar, setMostrar] = useState(
+    false
+  )
 
   function addFuncionarios(event) {
-
-
     event.preventDefault()
 
     const funciCpf = event.target.cpf.value
     const funciNome = event.target.name.value
 
-    if (!funciCpf) {
-      return event.target.name.value = ''
+    if (!funciCpf || !funciNome) {
+      return
     }
-    if (!funciNome) {
-      return event.target.cpf.value = ''
-    }
+
 
     setFuncionarios([...funcionarios, { cpf: funciCpf, name: funciNome, promover: false }])
 
@@ -34,12 +33,21 @@ function App() {
     event.target.name.value = ''
 
   }
-var mostrar = false
 
-  function listFuncionarios() {
-        return mostrar = trueya
+  function mostrarLista() {
+    setMostrar(mostrar = !mostrar)
   }
-console.log(mostrar)
+  function apto(cpf){
+    const funcionariosAptos = funcionarios.map(item => {
+       if(cpf === item.cpf){
+         item.promover = !item.promover
+       }
+       return item 
+      }
+    )
+    setFuncionarios(funcionariosAptos)
+  }
+
   return (
     <div className="App">
       <section>
@@ -47,24 +55,25 @@ console.log(mostrar)
         <form onSubmit={addFuncionarios}>
           <br />
           <label>Nome:</label>
-          <input id="name" placeholder='Nome' />
+          <input id="name" placeholder='Nome' required type="text" />
           <br />
           <label>Cpf:</label>
-          <input id="cpf" placeholder='Cpf' />
+          <input id="cpf" placeholder='Cpf' required type="number" />
           <br />
           <button>enviar</button>
-
         </form>
         <div>
           <p>mostrar lista de funcionarios cadastrados</p>
-          <button onClick={listFuncionarios}>mostrar</button>
+          <button onClick={mostrarLista}>mostrar</button>
         </div>
-        {mostrar ?
-             <ul>
-               {funcionarios.map(f => <li key={f.cpfcpf}>{funcionarios}</li>)}
-             </ul>: ''
+        {mostrar &&
+          funcionarios.map(item =>
+              <li  key={item.cpf}>
+              {item.name} {item.cpf} {console.log(item.promover)}  
+                <button onClick={apto(item.cpf)}>{item.promover ? 'inapto' : 'apto'}</button>
+              </li>
+          )
         }
-
       </section>
     </div>
   );
